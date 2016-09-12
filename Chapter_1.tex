@@ -1,10 +1,89 @@
 \maketitle
-\chapter{Supervised Learning}
-\begin{minted}{java}
- int a = 5;
- for (int i = 0; i < a; i++) {
- 	System.out.println("Hello World!");
- }
+\chapter{Week 1}
+\section{Introduction}
+\subsection{Supervised Learning}
+Examples of learning algorithms include straight and quadratic lines of best fit that go through a scatterplot.
 
+\textbf{Supervised Learning}: We are told what is the "correct" solution
 
-\end{minted}
+\textbf{Regression}: Predicting continuous value output
+
+\textbf{Classification}: Predicting a discreet value output (such as, but not limited to 0 and 1) 
+
+Machine learning problems may depend on 0, 1 or up to infinite number of features. How can we deal with an infininte number of features using a computer with a finite amount of memory?
+
+\subsection{Unsupervised Learning}
+Unlike supervised learning, the data set in unsupervised learning does not have any labels or structure. An example of an unsupervised learning algorithm is clustering, such as in Google News, clustering is used to aggregate news articles about similar topics.
+
+Another application of a clustering alogrithm is determining relationships between friends on a social network. 
+
+\textbf{Cocktail Party Problem}: Two speakers talking into microphones that are both at arbitrary distances from each other and each speaker. The cocktail party algorithm is able to separate the two individual voices.
+
+\section{Linear Regression with One Variable}
+\subsection{Model Representation}
+
+In supervised learning, there are data sets, and our job is to learn from this data. For example, a supervised learning algorithm can be used to predict the price of a house in Portland, Oregon based on its square footage. In this course, there will be a set of key notation:
+	
+	$m = $ Number of training examples
+
+	$x = $ Input variables/features
+
+	$y = $ Output variables/features
+
+	$(x, y) = $ One training example
+
+	$(x^($$^i$$^)$, $y^($$^i$$^)) = $ ith training example
+
+Start with a training set and feed that to a learning algorithm, which outputs to a function denoted by a h, i.e. h is a function that maps from x's to y's. The term h refers to the word hypothesis. When designing a learning algorithm, the next step is determining how to represent this hypothesis h. For example, h could be a linear regression with one variable, represented by:
+\begin{equation}
+	h_\theta = \theta_0 + \theta_1x
+	\label{eq:1.1}
+\end{equation}
+
+\subsection{Cost Function}
+
+In equation \ref{eq:1.1}, $\theta_0$ and $\theta_1$ are the two parameters of the model. The next step is determining the values of these two parameters which would give an h(x) that is closest to a value y for a given x. The best way to find these values is to minimize the squared difference between the estimated values and they y-values for every point in the training set. This cost function can be summarized as:
+\begin{equation}
+	J(\theta_0, \theta_1) = \frac{1}{2m}\sum_{i=1}^{m}(h_{\theta}x^{(i)} - y^{(i)})^2
+	\label{eq:1.2}
+\end{equation}
+
+\section{Gradient Descent}
+
+Gradient descent can be used to minimize the cost function J, as well as other functions. The main idea behind gradient descent is to guess $\theta_0$ and $\theta_1$ and then finding the error, then moving each up or down to minimize this error. One common guess is 0 for both values. Below is the equation for gradient descent:
+
+\begin{equation}
+	\theta_j := \theta_j - \alpha\frac{\partial}{\partial\theta_j}J(\theta_0, \theta_1)
+	\label{eq:1.3}
+\end{equation}
+
+Equation \ref{eq:1.3} should be repeated until convergence for j = 0 and j = 1. Below is pseudo-code for the iteration, demonstrating simultaneous updates of the values:
+
+\begin{equation}
+	\begin{split}
+	temp0 := \theta_0 - \alpha\frac{\partial}{\partial\theta_0}J(\theta_0, \theta_1)
+	\\
+	temp1 := \theta_1 - \alpha\frac{\partial}{\partial\theta_1}J(\theta_0, \theta_1)
+	\\
+	\theta_0 := temp0
+	\\
+	\theta_1 := temp1
+	\end{split}
+	\label{eq:1.4}
+\end{equation}
+
+\subsection{Gradient Descent for Linear Regression}
+
+Gradient descent can be used to get both $\theta_0$ and $\theta_1$, which can then be applied to the linear regression hypothesis and cost functions, \ref{eq:1.1} and \ref{eq:1.2} The first step is to calculate the derivative of the cost function and then subbing into the gradient descent function: 
+
+\begin{equation}
+	\begin{split}
+	\theta_0 := \theta_0 - \alpha\frac{1}{m}\sum_{i=1}^{m}(h_{\theta}x^{(i)} - y^{(i)})
+	\\
+	\theta_1 := \theta_1 - \alpha\frac{1}{m}\sum_{i=1}^{m}(h_{\theta}x^{(i)} - y^{(i)})x^{(i)}
+	\end{split}
+\end{equation}
+
+The main drawback to gradient descent in this form is that if there are any local minima, the function may fail to find the absolute minimum. However, in the case of linear regression, the cost function takes the form of a convex function, i.e. the local minimum is always the global minimum. 
+
+"Batch" gradient descent: Loooking at all training examples at each step of gradient descent

@@ -1,10 +1,91 @@
 \maketitle
-\chapter{Unsupervised Learning}
-\begin{minted}{java}
- int a = 5;
- for (int i = 0; i < a; i++) {
- 	System.out.println("Hello World!");
- }
+\chapter{Week 2}
+\section{Multivariate Linear Regression}
+\subsection{Multiple Features}
+
+\textbf{Notation}:
+
+n = number of features
+
+$x^{(i)}$ = input (features) of $i^{th}$ training example
+
+$x_j^{(i)}$ = value of feature j in $i^{th}$ training example
+
+The form of the hypothesis will now change because of the multiple features. i.e.:
+\begin{equation}
+	h_\theta(x) = \theta_0x_0 + \theta_1x_1 + \theta_2x_2 + . . . + \theta_nx_n
+	\label{eq:2.1}
+\end{equation}
+
+For convenience of notation, define $x_0 = 1$. This is the additional zero feature. In vector notation:
+\begin{equation}
+	\begin{split}
+	x = 
+    \begin{bmatrix}
+        x_0 \\ x_1 \\ x_2 \\ . \\ . \\ . \\ x_n
+    \end{bmatrix}
+    \epsilon  \Re^{n+1}   
+    \theta = 
+    \begin{bmatrix}
+        \theta_0 \\ \theta_1 \\ \theta_2 \\ . \\ . \\ . \\ \theta_n
+    \end{bmatrix}
+    \epsilon  \Re^{n+1}
+    \\
+    h_\theta(x) = \theta^Tx
+    \end{split}
+\end{equation}
+\subsection{Gradient Descent for Multiple Variables}
+For more than one feature, the gradient descent algorithm is summarized as:
+\begin{equation}
+	\theta_j := \theta_j - \alpha\frac{1}{m}\sum_{i=1}^{m}(h_{\theta}x^{(i)} - y^{(i)})x_j^{(i)}
+\end{equation}
+Where $\theta_j$ is being simulatneously updated for j = 0, ..., n. 
+
+\subsection{Gradient Descent and Feature Scaling}
+If the features in your gradient descent contain  a large range of values, it can become very tedious and time consuming for the algorithm to find the global minimum. One shortcut would be to scale all features so that all of their values lie as close between -1 and 1 as you can. 
+
+Similarly, mean normalization makes features have approximately zero mean using the following equation:
+\begin{equation}
+	x_1 = \frac{x_1 - \mu_1}{s_1}
+\end{equation}
+Where s is the standard deviation and $\mu$ is the mean of the feature set.
+
+\subsection{Learning Rate}
+To make sure that gradient descent is running smoothly, one tip would be to plot the algorithm while it is running, with the number of iterations on the x-axis and the minimum of the cost function on the y-axis. At some point, the cost function decrease will eventually flatten out (i.e. its slope will approach zero), at which point gradient descent converges. One tip would be to have a check that checks whether gradient descent produces a cost function value that decreases by less than some threshold. 
+
+If your cost function is increasing, maybe use a smaller alpha value. Try values of $\alpha$ at a few orders of magnitude and then pick the largest reasonable value. 
+
+\subsection{Features and Polynomial Regression}
+You are not constrained to the features presented to you when doing a linear regression model. In the case of a house for example, you can use a combination of depth and frontage to calculate the housing price. You could multiply the two values and use a third feature called Area which is the product of the two. 
+
+Similarily, polynomial regression refers to using models that have different powers of influence over the hypothesis function. One thing to be careful of is the range of valeus for these new features, as they will increase exponentially, thus it's important to make sure feature scaling is being used to optimize the algorithm. 
+
+\section{Computing Paramaters Analytically}
+\subsection{Normal Equation}
+Rather than run an iterative algorithm for minimizing the cost function J, we can take an analytical approach to solve for $\theta$. In 1-D application, if the cost function is quadtratic, we can take the derivative of it and set it to 0, which would give us the minimum. 
+
+For m \textbf{examples} ($x^{(1)}$, $y^{(1)}$), ..., ($x^{(m)}$, $y^{(m)}$); n \textbf{features}.
+\begin{equation}
+	x^{(i)} =
+    \begin{bmatrix}
+        x_0^{(i)} \\ x_1^{(i)} \\ x_2^{(i)} \\ . \\ . \\ . \\ x_n^{(i)}
+    \end{bmatrix}
+    \epsilon  \Re^{n+1}
+\end{equation}
+
+NOTE: Remember that $x_0$ always equals to 1. We are now going to create a matrix X, dubbed the design matrix, which contains the transpose of all elements in the x matrix, thus making it an m x (n+1) matrix. We do the same for the Y matrix.
+
+The calculation of $\theta$ can be analytically given as:
+\begin{equation}
+	\theta = (X^TX)^{-1}X^Ty
+\end{equation}
+Where $(X^TX)^{-1}$ is the inverse matrix of $X^TX$
+
+For m training examples and n features, the advantage of the analytical approach over gradient descent is that we don't need to choose a value for $\alpha$ and we don't need to iterate. However, gradient descent works pretty well when n is large, which can get pretty slow for the analytical approach as it needs to compute the inverse of an n x n matrix, which is roughly O($n^3$) in computation costs. Normal equation should probably be used until around 10,000 features.
+
+\subsection{Normal Equation and Noninvertibility}
+
+What happens when $X^TX$ is non-invertible? (i.e. it is singular or degenerate). The most common causes for this would be if you have redundant features, such as the size of a house in two different dimensions. Another possible cause is if you have too many features, i.e. the value of n is greater than n. Solution to this would be to either aggregate more data (ideal) or delete some features or use a technique called regularization. 
 
 
 \end{minted}
